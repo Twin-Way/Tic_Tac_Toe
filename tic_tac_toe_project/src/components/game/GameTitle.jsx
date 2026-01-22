@@ -11,7 +11,7 @@ export default function GameTitle({ playersCount }) {
         На главную
       </a>
 
-      <h1 className="text-4xl font-[Inter] leading-[1.2]">Крестики нолики</h1>
+      <h1 className="text-4xl font-[Inter] leading-[1.2]">Крестики-нолики</h1>
 
       <div className="flex gap-3 items-center text-xs text-slate-400">
         <StarIcon />

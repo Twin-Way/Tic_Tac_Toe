@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import Profile from '../profile/Profile.jsx';
-import GameSymbol1 from './GameSymbol1.jsx';
-import { GAME_SYMBOLS } from './constants.js';
+import GameSymbol1 from '../gameNew/ui/GameSymbol1.jsx';
+import { GAME_SYMBOLS } from '../gameNew/ui/constants.js';
 import avatarSrc1 from './images/avatar1.png';
 import avatarSrc2 from './images/avatar2.png';
 import avatarSrc3 from './images/avatar3.png';
@@ -15,17 +15,23 @@ const players = [
   { id: 4, name: 'User809', rating: 760, symbol: GAME_SYMBOLS.SQUARE, avatar: avatarSrc4 },
 ];
 
-export default function GameInfo({ className, playersCount, currentMove }) {
+export default function GameInfo({ className, playersCount, currentMove, isWinner, onPlayerTimeOver }) {
   return (
     <div className={clsx(className, 'bg-white rounded-2xl shadow-md px-8 py-4 grid grid-cols-2 gap-3 justify-between')}>
       {players.slice(0, playersCount).map((player, index) => (
-        <PlayerInfo key={player.id} playerInfo={player} index={index} isTimerRunning={currentMove === player.symbol} />
+        <PlayerInfo
+          key={player.id}
+          playerInfo={player}
+          index={index}
+          onTimerOver={() => onPlayerTimeOver(player.symbol)}
+          isTimerRunning={currentMove === player.symbol && isWinner}
+        />
       ))}
     </div>
   );
 }
 
-function PlayerInfo({ playerInfo, isTimerRunning }) {
+function PlayerInfo({ playerInfo, isTimerRunning, onTimerOver }) {
   const [seconds, setSeconds] = useState(30);
   const minutesString = String(Math.floor(seconds / 60)).padStart(2, '0');
   const secondsString = String(seconds % 60).padStart(2, '0');
@@ -43,6 +49,12 @@ function PlayerInfo({ playerInfo, isTimerRunning }) {
       };
     }
   }, [isTimerRunning]);
+
+  useEffect(() => {
+    if (seconds === 0) {
+      onTimerOver();
+    }
+  }, [seconds]);
 
   const getTimerColor = () => {
     if (isTimerRunning) {

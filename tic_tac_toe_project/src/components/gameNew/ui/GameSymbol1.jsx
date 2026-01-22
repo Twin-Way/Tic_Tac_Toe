@@ -1,8 +1,8 @@
 import { GAME_SYMBOLS } from './constants.js';
-import CrossIcon from './icons/CrossIcon.jsx';
-import ZeroIcon from './icons/ZeroIcon.jsx';
-import TriangleIcon from './icons/TriangleIcon.jsx';
-import SquareIcon from './icons/SquareIcon.jsx';
+import CrossIcon from '../../game/icons/CrossIcon.jsx';
+import ZeroIcon from '../../game/icons/ZeroIcon.jsx';
+import TriangleIcon from '../../game/icons/TriangleIcon.jsx';
+import SquareIcon from '../../game/icons/SquareIcon.jsx';
 
 export default function GameSymbol1({ symbol, className }) {
   const Icon =
