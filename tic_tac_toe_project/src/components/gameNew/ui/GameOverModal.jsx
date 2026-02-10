@@ -3,7 +3,7 @@ import UiButton from '../../uikit/UiButton.jsx';
 
 export default function GameOverModal({ winnerName, players }) {
   return (
-    <UiModal width="md" isOpen={winnerName} onClose={() => console.log('close')}>
+    <UiModal width="md" isOpen onClose={() => console.log('close')}>
       <UiModal.Header>Игра завершена!</UiModal.Header>
       <UiModal.Body>
         <div className="text-sm">

@@ -1,29 +1,50 @@
-export function computeWinner(cells, sequenceSize = 5, fieldSize = 19) {
-  const directions = [1, fieldSize, fieldSize + 1, fieldSize - 1];
-  const isBounds = index => index >= 0 && index < cells.length;
+export function computeWinner(gameState, sequenceSize = 5, fieldSize = 19) {
+  const cells = gameState.cells;
+  const gap = Math.floor(sequenceSize / 2);
+  function compareElements(indexes) {
+    let result = true;
+
+    for (let i = 1; i < indexes.length; i++) {
+      result &&= !!cells[indexes[i]];
+      result &&= cells[indexes[i]] === cells[indexes[i - 1]];
+    }
+
+    return result;
+  }
+
+  function getSequenceIndexes(i) {
+    const res = [
+      [],
+      [],
+      [],
+      [], // |
+    ];
+
+    for (let j = 0; j < sequenceSize; j++) {
+      res[0].push(j - gap + i);
+      res[1].push(fieldSize * (j - gap) + (j - gap) + i);
+      res[2].push(-fieldSize * (j - gap) + (j - gap) + i);
+      res[3].push(fieldSize * (j - gap) + i);
+    }
+
+    const x = i % fieldSize;
+    if (x < gap || x >= fieldSize - gap) {
+      res.shift();
+      res.shift();
+      res.shift();
+    }
+
+    return res;
+  }
+
   for (let i = 0; i < cells.length; i++) {
-    const player = cells[i];
-    if (!player) continue;
+    if (cells[i]) {
+      const indexRows = getSequenceIndexes(i);
 
-    for (const dir of directions) {
-      let count = 1;
-      const indexes = [i];
+      const winnerIndexes = indexRows.find(row => compareElements(row));
 
-      let next = i + dir; //вперед
-      while (isBounds(next) && cells[next] === player) {
-        indexes.push(next);
-        count++;
-        next += dir;
-      }
-
-      next = i - dir; //назад
-      while (isBounds(next) && cells[next] === player) {
-        indexes.unshift(next);
-        count++;
-        next -= dir;
-      }
-      if (count >= sequenceSize) {
-        return indexes.slice(0, sequenceSize);
+      if (winnerIndexes) {
+        return winnerIndexes;
       }
     }
   }
